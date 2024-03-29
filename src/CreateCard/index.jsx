@@ -82,7 +82,8 @@ const FormCard = () => {
                 idProduct: item,
                 quantity: 0,
                 productName: crrData?.ten,
-                price: crrData?.gia_final
+                price: crrData?.gia_final,
+                weight: crrData?.trong_luong_final
             }
         });
         setSelectedProductKeys(listProduct);
