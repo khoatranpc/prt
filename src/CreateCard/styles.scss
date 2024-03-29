@@ -1,0 +1,18 @@
+.formCreateCard {
+    .handleCreateBill {
+        display: flex;
+        justify-content: center;
+        gap: 150px;
+    }
+}
+
+.moreOptional {
+    display: flex;
+    gap: 150px;
+}
+
+.checkboxOption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
