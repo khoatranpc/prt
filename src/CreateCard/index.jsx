@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
 import axios from 'axios';
-import { Table, Select, Input, Button, Modal, Form, Checkbox } from 'antd';
+import dayjs from 'dayjs';
+import { Table, Select, Input, Button, Modal, Form, Checkbox, DatePicker } from 'antd';
 import './styles.scss';
 
 const FormCard = () => {
@@ -12,6 +14,30 @@ const FormCard = () => {
     const [modal, setModal] = useState(false);
     const [packaging, setPackaging] = useState([]);
     const [chiphi, setChiphi] = useState([]);
+    const { values, touched, handleBlur, handleChange, handleSubmit, setValues, setFieldValue } = useFormik({
+        initialValues: {
+            contract: '',
+            shippingLine: '',
+            shippedPer: '',
+            consignee: '',
+            portOfLoading: '',
+            placeOfDelivery: '',
+            sailingOn: '',
+            bookingOn: '',
+            billOfLadingNo: '',
+            containerSealNo: '',
+        },
+        onSubmit(values) {
+            const dataBody = {
+                customer: customerSelected,
+                listProduct: selectedProductKeys,
+                packaging,
+                chiphi,
+                ...values
+            };
+            console.log(dataBody);
+        }
+    });
 
     const getColumns = [
         {
@@ -92,15 +118,6 @@ const FormCard = () => {
         selectedProductKeys,
         onChange: onSelectChange,
     };
-    const handleSubmitData = () => {
-        const dataBody = {
-            customer: customerSelected,
-            listProduct: selectedProductKeys,
-            packaging,
-            chiphi
-        };
-        console.log(dataBody);
-    }
     useEffect(() => {
         queryListProduct();
     }, []);
@@ -138,52 +155,97 @@ const FormCard = () => {
                     setModal(false);
                 }}
                 width={"100vw"}
-                onOk={() => {
-                    handleSubmitData();
+                okButtonProps={{
+                    htmlType: "submit"
                 }}
+                onOk={handleSubmit}
             >
-                <Form className="bill">
-                    <Form.Item>
-                        <label>Tên khách hàng</label>
-                        <p><b>{dataCustomer.find((item) => item.value === customerSelected)?.label}</b></p>
-                    </Form.Item>
-                    <Form.Item>
-                        <label>Sản phẩm</label>
-                        <Table
-                            pagination={false}
-                            columns={getColumnsBill}
-                            dataSource={selectedProductKeys}
-                        />
-                    </Form.Item>
-                    <div className="moreOptional">
-                        <div className="left">
-                            <label>Packaging</label>
-                            <Checkbox.Group
-                                defaultValue={packaging}
-                                className="checkboxOption"
-                                onChange={(value) => {
-                                    setPackaging(value);
-                                }}
-                            >
-                                {rootData.packagking?.map((item) => {
-                                    return <Checkbox key={item.id_chiphi} value={item.id_chiphi}>{item.ten}</Checkbox>
-                                })}
-                            </Checkbox.Group>
+                <Form className="bill" onSubmit={handleSubmit}>
+                    <div className="left">
+                        <Form.Item>
+                            <label>Tên khách hàng</label>
+                            <p><b>{dataCustomer.find((item) => item.value === customerSelected)?.label}</b></p>
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Sản phẩm</label>
+                            <Table
+                                pagination={false}
+                                columns={getColumnsBill}
+                                dataSource={selectedProductKeys}
+                            />
+                        </Form.Item>
+                        <div className="moreOptional">
+                            <div className="left">
+                                <label>Packaging</label>
+                                <Checkbox.Group
+                                    defaultValue={packaging}
+                                    className="checkboxOption"
+                                    onChange={(value) => {
+                                        setPackaging(value);
+                                    }}
+                                >
+                                    {rootData.packagking?.map((item) => {
+                                        return <Checkbox key={item.id_chiphi} value={item.id_chiphi}>{item.ten}</Checkbox>
+                                    })}
+                                </Checkbox.Group>
+                            </div>
+                            <div className="right">
+                                <label>Gia công</label>
+                                <Checkbox.Group
+                                    className="checkboxOption"
+                                    defaultValue={chiphi}
+                                    onChange={(value) => {
+                                        setChiphi(value);
+                                    }}
+                                >
+                                    {rootData.chiphi?.map((item) => {
+                                        return <Checkbox key={item.id_chiphi} value={item.id_chiphi}>{item.ten}</Checkbox>
+                                    })}
+                                </Checkbox.Group>
+                            </div>
                         </div>
-                        <div className="right">
-                            <label>Gia công</label>
-                            <Checkbox.Group
-                                className="checkboxOption"
-                                defaultValue={chiphi}
-                                onChange={(value) => {
-                                    setChiphi(value);
-                                }}
-                            >
-                                {rootData.chiphi?.map((item) => {
-                                    return <Checkbox key={item.id_chiphi} value={item.id_chiphi}>{item.ten}</Checkbox>
-                                })}
-                            </Checkbox.Group>
-                        </div>
+                    </div>
+                    <div className="right">
+                        <Form.Item>
+                            <label>Contract</label>
+                            <Input size="small" name="contract" onChange={handleChange} onBlur={handleBlur} value={values.contract} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Shipping Line</label>
+                            <Input size="small" name="shippingLine" onChange={handleChange} onBlur={handleBlur} value={values.shippingLine} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Shipped Per</label>
+                            <Input size="small" name="shippedPer" onChange={handleChange} onBlur={handleBlur} value={values.shippedPer} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Consignee</label>
+                            <Input size="small" name="consignee" onChange={handleChange} onBlur={handleBlur} value={values.consignee} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Port of loading</label>
+                            <Input size="small" name="portOfLoading" onChange={handleChange} onBlur={handleBlur} value={values.portOfLoading} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Place of Delivery</label>
+                            <Input size="small" name="placeOfDelivery" onChange={handleChange} onBlur={handleBlur} value={values.placeOfDelivery} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Sailing on</label>
+                            <Input size="small" name="sailingOn" onChange={handleChange} onBlur={handleBlur} value={values.sailingOn} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Booking No</label>
+                            <Input type="number" size="small" name="bookingOn" onChange={handleChange} onBlur={handleBlur} value={values.bookingOn} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Bill of lading no</label>
+                            <Input size="small" name="billOfLadingNo" onChange={handleChange} onBlur={handleBlur} value={values.billOfLadingNo} />
+                        </Form.Item>
+                        <Form.Item>
+                            <label>Container/Seal no</label>
+                            <Input size="small" name="containerSealNo" onChange={handleChange} onBlur={handleBlur} value={values.containerSealNo} />
+                        </Form.Item>
                     </div>
                 </Form>
             </Modal>}
