@@ -1,0 +1,66 @@
+.generateBill {
+    max-width: 70vw;
+    margin: auto;
+
+    .row {
+        display: flex;
+        margin-bottom: 18px;
+
+        .left {
+            flex: 1;
+        }
+
+        .right {
+            flex: 0.7;
+            font-weight: bold;
+        }
+    }
+
+    .imgLogo {
+        max-width: 100%;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 18px;
+    }
+}
+
+.date {
+    font-weight: bold;
+    font-style: italic;
+    text-align: right;
+}
+
+.tableBill {
+    .table {
+        border-collapse: collapse;
+
+
+        td,
+        th {
+            border: 1px solid black;
+            padding: 15px;
+            font-weight: bold !important;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+    }
+}
+
+.copyright {
+    padding: 10px 0;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.forCompany {
+    font-weight: bold;
+    text-align: right;
+}

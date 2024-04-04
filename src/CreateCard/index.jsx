@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import dayjs from 'dayjs';
-import { Table, Select, Input, Button, Modal, Form, Checkbox, DatePicker } from 'antd';
+import { Table, Select, Input, Button, Modal, Form, Checkbox } from 'antd';
+import Bill from '../Bill';
 import './styles.scss';
 
-const FormCard = () => {
+const createBill = async (dataBody) => {
+    const data = await axios.post('https://tanphong.onrender.com/donhang/', dataBody);
+    return data;
+}
+const FormCard = (props) => {
+    const nav = useNavigate();
     const [rootData, setRootData] = useState([]);
     const [dataSource, setDataSource] = useState([]);
     const [dataCustomer, setDataCustomer] = useState([]);
@@ -27,7 +33,7 @@ const FormCard = () => {
             billOfLadingNo: '',
             containerSealNo: '',
         },
-        onSubmit(values) {
+        async onSubmit(values) {
             const dataBody = {
                 customer: customerSelected,
                 listProduct: selectedProductKeys,
@@ -35,7 +41,8 @@ const FormCard = () => {
                 chiphi,
                 ...values
             };
-            console.log(dataBody);
+            const data = await createBill(dataBody);
+            props.setDataBill(data);
         }
     });
 
@@ -147,6 +154,7 @@ const FormCard = () => {
                     options={dataCustomer}
                 />
                 <Button onClick={() => setModal(true)}>Tạo đơn hàng</Button>
+                <Button onClick={() => { nav('/bill') }}>Hoá đơn</Button>
             </div>
             {modal && <Modal
                 open={modal}
