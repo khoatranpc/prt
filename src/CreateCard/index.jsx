@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Table, Select, Input, Button, Modal, Form, Checkbox } from 'antd';
-import Bill from '../Bill';
 import './styles.scss';
 
 const createBill = async (dataBody) => {
@@ -54,7 +53,7 @@ const FormCard = (props) => {
         },
         {
             title: 'Giá',
-            dataIndex: 'gia_final',
+            dataIndex: 'gia',
             key: 'PRICE'
         },
         {
